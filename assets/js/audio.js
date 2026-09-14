@@ -1,0 +1,10 @@
+(() => {
+  const form=document.getElementById("audioForm"),fileInput=document.getElementById("audioFile"),source=document.getElementById("audioSource"),target=document.getElementById("audioTarget"),submit=document.getElementById("audioSubmit"),status=document.getElementById("audioStatus"),result=document.getElementById("audioResult"),transcription=document.getElementById("audioTranscription"),translation=document.getElementById("audioTranslation"),originalAudio=document.getElementById("originalAudio"),translatedAudio=document.getElementById("translatedAudio");let originalUrl,translatedUrl;App.keepOpposite(source,target);
+  const showStatus=text=>{status.classList.remove("d-none");status.innerHTML=`<span class="spinner-border spinner-border-sm me-2"></span>${text}`;};
+  fileInput.addEventListener("change",()=>{if(originalUrl)URL.revokeObjectURL(originalUrl);const file=fileInput.files[0];if(!file)return originalAudio.classList.add("d-none");originalUrl=URL.createObjectURL(file);originalAudio.src=originalUrl;originalAudio.classList.remove("d-none");});
+  form.addEventListener("submit",async event=>{
+    event.preventDefault();try{const file=fileInput.files[0];App.validateFile(file,["mp3","wav","m4a","webm"]);result.classList.add("d-none");showStatus("Subiendo y transcribiendo el audio...");App.setButtonLoading(submit,true,"Procesando...");const body=new FormData();body.append("file",file);body.append("source_language",source.value);body.append("target_language",target.value);const data=await App.requestJson("/audio",{method:"POST",body});transcription.textContent=data.transcription;translation.textContent=data.translation;showStatus("Generando el audio de la traducción...");const blob=await App.requestAudio("/speech",{text:data.translation,target_language:target.value});if(translatedUrl)URL.revokeObjectURL(translatedUrl);translatedUrl=URL.createObjectURL(blob);translatedAudio.src=translatedUrl;status.classList.add("d-none");result.classList.remove("d-none");}
+    catch(error){status.classList.add("d-none");App.showAlert(error.message);}finally{App.setButtonLoading(submit,false);}
+  });
+})();
+

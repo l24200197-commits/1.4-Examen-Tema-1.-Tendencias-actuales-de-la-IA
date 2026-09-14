@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="api-base-url" content="https://TU-BACKEND.vercel.app/api">
+  <title>Traductor Inteligente Multimodal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#"><i class="bi bi-translate me-2"></i>Traductor IA</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto nav nav-pills" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#textPane">Texto</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#chatPane">Chat</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#audioPane">Audio</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#documentPane">Documentos</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#imagePane">Imágenes</button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<header class="hero text-center text-white">
+  <div class="container">
+    <span class="badge rounded-pill text-bg-light">Inteligencia Artificial multimodal</span>
+    <h1 class="display-5 fw-bold mt-3">Español <i class="bi bi-arrow-left-right"></i> Inglés</h1>
+    <p class="lead">Texto, conversación, audio, documentos e imágenes en una sola plataforma.</p>
+  </div>
+</header>
+
+<main class="container pb-5">
+  <div id="globalAlert" aria-live="polite"></div>
+  <div class="alert alert-warning privacy"><i class="bi bi-shield-exclamation me-2"></i>El contenido puede enviarse a servicios de IA. No envíes contraseñas, datos bancarios ni información sensible.</div>
+  <div class="tab-content">
+    <section class="tab-pane fade show active" id="textPane">
+      <div class="module-card">
+        <div class="module-title"><div><h2>Traducción de texto</h2><p>Escribe el contenido y selecciona los idiomas.</p></div><i class="bi bi-fonts"></i></div>
+        <form id="textForm">
+          <div class="language-row">
+            <select id="textSource" class="form-select"><option value="es">Español</option><option value="en">English</option></select>
+            <button id="textSwap" class="btn btn-outline-primary" type="button"><i class="bi bi-arrow-left-right"></i></button>
+            <select id="textTarget" class="form-select"><option value="en">English</option><option value="es">Español</option></select>
+          </div>
+          <div class="row g-4 mt-1">
+            <div class="col-lg-6"><label class="form-label" for="originalText">Texto original</label><textarea id="originalText" class="form-control translation-area" maxlength="10000" required></textarea><small id="textCounter">0 / 10,000 caracteres</small></div>
+            <div class="col-lg-6"><label class="form-label" for="translatedText">Traducción</label><textarea id="translatedText" class="form-control translation-area result-area" readonly></textarea></div>
+          </div>
+          <button id="textSubmit" class="btn btn-primary mt-4" type="submit"><i class="bi bi-stars me-2"></i>Traducir texto</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="tab-pane fade" id="chatPane">
+      <div class="module-card">
+        <div class="module-title"><div><h2>Chat bilingüe</h2><p>Cada mensaje muestra original y traducción.</p></div><i class="bi bi-chat-dots"></i></div>
+        <div id="chatMessages" class="chat-messages"><div class="empty-state"><i class="bi bi-chat-square-text"></i><p>La conversación aparecerá aquí.</p></div></div>
+        <form id="chatForm" class="mt-4">
+          <div class="row g-3">
+            <div class="col-md-4"><label class="form-label" for="chatSpeaker">Participante</label><input id="chatSpeaker" class="form-control" maxlength="50" value="Carlos" required></div>
+            <div class="col-md-4"><label class="form-label" for="chatSource">Escribe en</label><select id="chatSource" class="form-select"><option value="es">Español</option><option value="en">English</option></select></div>
+            <div class="col-md-4 d-flex align-items-end"><button id="clearChat" class="btn btn-outline-danger w-100" type="button"><i class="bi bi-trash3 me-2"></i>Limpiar</button></div>
+            <div class="col-12"><label class="form-label" for="chatMessage">Mensaje</label><textarea id="chatMessage" class="form-control" rows="3" maxlength="3000" required></textarea></div>
+          </div>
+          <button id="chatSubmit" class="btn btn-primary mt-3" type="submit"><i class="bi bi-send me-2"></i>Enviar y traducir</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="tab-pane fade" id="audioPane">
+      <div class="module-card">
+        <div class="module-title"><div><h2>Traducción de audio</h2><p>MP3, WAV, M4A y WEBM; máximo 3.8 MB.</p></div><i class="bi bi-mic"></i></div>
+        <form id="audioForm">
+          <div class="language-row"><select id="audioSource" class="form-select"><option value="es">Español</option><option value="en">English</option></select><i class="bi bi-arrow-right direction"></i><select id="audioTarget" class="form-select"><option value="en">English</option><option value="es">Español</option></select></div>
+          <input id="audioFile" class="form-control mt-4" type="file" accept=".mp3,.wav,.m4a,.webm" required>
+          <audio id="originalAudio" class="w-100 mt-3 d-none" controls></audio>
+          <button id="audioSubmit" class="btn btn-primary mt-4" type="submit"><i class="bi bi-soundwave me-2"></i>Procesar audio</button>
+        </form>
+        <div id="audioStatus" class="process-status d-none"></div>
+        <div id="audioResult" class="result-container d-none"><h3>Transcripción original</h3><div id="audioTranscription" class="output-box"></div><h3>Traducción</h3><div id="audioTranslation" class="output-box"></div><p class="small text-secondary mt-3 mb-2">Voz generada mediante IA.</p><audio id="translatedAudio" class="w-100" controls></audio></div>
+      </div>
+    </section>
+
+    <section class="tab-pane fade" id="documentPane">
+      <div class="module-card">
+        <div class="module-title"><div><h2>Traducción de documentos</h2><p>PDF, DOCX y TXT; máximo 3.8 MB.</p></div><i class="bi bi-file-earmark-text"></i></div>
+        <form id="documentForm">
+          <div class="language-row"><select id="documentSource" class="form-select"><option value="es">Español</option><option value="en">English</option></select><i class="bi bi-arrow-right direction"></i><select id="documentTarget" class="form-select"><option value="en">English</option><option value="es">Español</option></select></div>
+          <input id="documentFile" class="form-control mt-4" type="file" accept=".pdf,.docx,.txt" required>
+          <button id="documentSubmit" class="btn btn-primary mt-4" type="submit"><i class="bi bi-file-earmark-arrow-up me-2"></i>Traducir documento</button>
+        </form>
+        <div id="documentStatus" class="process-status d-none"></div>
+        <div id="documentResult" class="result-container d-none"><p><strong>Documento:</strong> <span id="documentName"></span></p><div class="row g-4"><div class="col-lg-6"><h3>Original</h3><pre id="documentOriginal" class="document-output"></pre></div><div class="col-lg-6"><h3>Traducción</h3><pre id="documentTranslation" class="document-output translated"></pre></div></div></div>
+      </div>
+    </section>
+
+    <section class="tab-pane fade" id="imagePane">
+      <div class="module-card">
+        <div class="module-title"><div><h2>Traducción de imágenes</h2><p>JPG, PNG y WEBP; máximo 3.8 MB.</p></div><i class="bi bi-image"></i></div>
+        <form id="imageForm">
+          <div class="language-row"><select id="imageSource" class="form-select"><option value="es">Español</option><option value="en">English</option></select><i class="bi bi-arrow-right direction"></i><select id="imageTarget" class="form-select"><option value="en">English</option><option value="es">Español</option></select></div>
+          <input id="imageFile" class="form-control mt-4" type="file" accept=".jpg,.jpeg,.png,.webp" required>
+          <div id="imagePreviewContainer" class="d-none mt-4"><img id="imagePreview" class="image-preview" alt="Vista previa"></div>
+          <button id="imageSubmit" class="btn btn-primary mt-4" type="submit"><i class="bi bi-eye me-2"></i>Interpretar y traducir</button>
+        </form>
+        <div id="imageStatus" class="process-status d-none"></div>
+        <div id="imageResult" class="result-container d-none"><div id="imageWarning"></div><h3>Texto identificado</h3><div id="imageDetectedText" class="output-box"></div><h3>Traducción</h3><div id="imageTranslation" class="output-box"></div></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="text-center"><p class="fw-bold mb-1">Traductor Inteligente Multimodal</p><p class="mb-1">Desarrollado por José Alonso Godínez Franco</p><small>Inteligencia Artificial · 2026</small></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/app.js"></script><script src="assets/js/chat.js"></script><script src="assets/js/audio.js"></script><script src="assets/js/documents.js"></script><script src="assets/js/images.js"></script>
+</body>
+</html>
+
