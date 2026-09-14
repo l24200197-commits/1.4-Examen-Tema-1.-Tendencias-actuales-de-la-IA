@@ -1,7 +1,7 @@
 (() => {
   const configured = document.querySelector('meta[name="api-base-url"]')?.content?.replace(/\/$/, "");
   const local = ["localhost", "127.0.0.1"].includes(location.hostname);
-  const API_BASE_URL = local ? "http://127.0.0.1:5000/api" : configured;
+  const API_BASE_URL = local ? "http://127.0.0.1:5001/api" : configured;
   const MAX_FILE_BYTES = 3_800_000;
 
   const escapeHtml = value => { const div=document.createElement("div"); div.textContent=String(value??""); return div.innerHTML; };

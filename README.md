@@ -159,6 +159,7 @@ José Alonso Godínez Franco
 
 ## URLs de entrega
 
-- Aplicación: `PENDIENTE_URL_GITHUB_PAGES`
-- Repositorio: `PENDIENTE_URL_REPOSITORIO`
+- Aplicación: https://l24200197-commits.github.io/1.4-Examen-Tema-1.-Tendencias-actuales-de-la-IA/
+- Repositorio: https://github.com/l24200197-commits/1.4-Examen-Tema-1.-Tendencias-actuales-de-la-IA
+- Backend: https://backend-ecru-eight-15.vercel.app/api/health
 
