@@ -95,7 +95,7 @@
           <button id="documentSubmit" class="btn btn-primary mt-4" type="submit"><i class="bi bi-file-earmark-arrow-up me-2"></i>Traducir documento</button>
         </form>
         <div id="documentStatus" class="process-status d-none"></div>
-        <div id="documentResult" class="result-container d-none"><p><strong>Documento:</strong> <span id="documentName"></span></p><div class="row g-4"><div class="col-lg-6"><h3>Original</h3><pre id="documentOriginal" class="document-output"></pre></div><div class="col-lg-6"><h3>Traducción</h3><pre id="documentTranslation" class="document-output translated"></pre></div></div></div>
+        <div id="documentResult" class="result-container d-none"><div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><p class="mb-0"><strong>Documento:</strong> <span id="documentName"></span></p><button type="button" id="documentDownload" class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf me-1"></i>Descargar PDF</button></div><div class="row g-4"><div class="col-lg-6"><h3>Original</h3><pre id="documentOriginal" class="document-output"></pre></div><div class="col-lg-6"><h3>Traducción</h3><pre id="documentTranslation" class="document-output translated"></pre></div></div></div>
       </div>
     </section>
 
@@ -109,7 +109,7 @@
           <button id="imageSubmit" class="btn btn-primary mt-4" type="submit"><i class="bi bi-eye me-2"></i>Interpretar y traducir</button>
         </form>
         <div id="imageStatus" class="process-status d-none"></div>
-        <div id="imageResult" class="result-container d-none"><div id="imageWarning"></div><h3>Texto identificado</h3><div id="imageDetectedText" class="output-box"></div><h3>Traducción</h3><div id="imageTranslation" class="output-box"></div></div>
+        <div id="imageResult" class="result-container d-none"><div id="imageWarning"></div><div class="d-flex justify-content-end mb-3"><button type="button" id="imageDownload" class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf me-1"></i>Descargar PDF</button></div><h3>Texto identificado</h3><div id="imageDetectedText" class="output-box"></div><h3>Traducción</h3><div id="imageTranslation" class="output-box"></div></div>
       </div>
     </section>
   </div>
@@ -117,7 +117,8 @@
 
 <footer class="text-center"><p class="fw-bold mb-1">Traductor Inteligente Multimodal</p><p class="mb-1">Desarrollado por José Alonso Godínez Franco</p><small>Inteligencia Artificial · 2026</small></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/app.js"></script><script src="assets/js/chat.js"></script><script src="assets/js/audio.js"></script><script src="assets/js/documents.js"></script><script src="assets/js/images.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="assets/js/app.js"></script><script src="assets/js/pdf.js"></script><script src="assets/js/chat.js"></script><script src="assets/js/audio.js"></script><script src="assets/js/documents.js"></script><script src="assets/js/images.js"></script>
 </body>
 </html>
 
