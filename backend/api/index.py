@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
-from werkzeug.exceptions import RequestEntityTooLarge
+from werkzeug.exceptions import HTTPException, RequestEntityTooLarge
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
@@ -175,6 +175,22 @@ def handle_large_request(_error):
 def handle_not_found(_error):
     return jsonify({"success": False, "error": "NOT_FOUND",
                     "message": "El endpoint solicitado no existe."}), 404
+
+
+# Without this, Werkzeug routing errors such as 405 fall through to the
+# catch-all below and are reported as internal failures.
+@app.errorhandler(HTTPException)
+def handle_http_error(error):
+    messages = {
+        400: "La solicitud está mal formada.",
+        405: "El método HTTP no está permitido en este endpoint.",
+        415: "El tipo de contenido enviado no es compatible.",
+    }
+    return jsonify({
+        "success": False,
+        "error": error.name.upper().replace(" ", "_"),
+        "message": messages.get(error.code, "La solicitud no pudo procesarse."),
+    }), error.code
 
 
 @app.errorhandler(Exception)

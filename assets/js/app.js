@@ -17,23 +17,20 @@
   async function errorMessage(response){
     try{return (await response.json()).message||"La solicitud no pudo completarse.";}catch{return response.status===413?"El archivo excede el límite permitido.":"Respuesta inesperada del servidor.";}
   }
-  async function requestJson(endpoint,options={}){
+  async function request(endpoint,options={}){
     const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),120000);
     try{
       const response=await fetch(`${API_BASE_URL}${endpoint}`,{...options,signal:controller.signal});
       if(!response.ok)throw new Error(await errorMessage(response));
-      return await response.json();
+      return response;
     }catch(error){
       if(error.name==="AbortError")throw new Error("La solicitud tardó demasiado tiempo.");
       if(error instanceof TypeError)throw new Error("No fue posible conectar con el backend.");
       throw error;
     }finally{clearTimeout(timer);}
   }
-  async function requestAudio(endpoint,body){
-    const response=await fetch(`${API_BASE_URL}${endpoint}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    if(!response.ok)throw new Error(await errorMessage(response));
-    return response.blob();
-  }
+  const requestJson=async(endpoint,options={})=>(await request(endpoint,options)).json();
+  const requestAudio=async(endpoint,body)=>(await request(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).blob();
   function validateFile(file,extensions){
     if(!file)throw new Error("Selecciona un archivo.");
     if(file.size>MAX_FILE_BYTES)throw new Error("El archivo excede el límite de 3.8 MB.");
